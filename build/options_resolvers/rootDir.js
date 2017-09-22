@@ -1,7 +1,7 @@
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 exports.default = rootDir;
 
@@ -22,21 +22,22 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @returns {String}
  */
 function rootDir(value /* , currentConfig */) {
-    if (!(0, _utils.isString)(value)) {
-        throw new Error('Configuration \'rootDir\' is not a string');
-    }
-    console.log("HERE WE ARE .............");
-    if (!(0, _path.isAbsolute)(value)) {
-        if (!(0, _fs.statSync)(value).isDirectory()) {
-            throw new Error('Configuration \'rootDir\' is not containg a valid absolute path');
-        }
-    } else {
-        var workDir = process.cwd();
-        var returnable = _path2.default.join(workDir, value);
-        console.log("path was");
-        console.log(returnable);
-        return returnable;
-    }
+  if (!(0, _utils.isString)(value)) {
+    throw new Error('Configuration \'rootDir\' is not a string');
+  }
 
-    return value;
+  if ((0, _path.isAbsolute)(value)) {
+    if (!(0, _fs.statSync)(value).isDirectory()) {
+      throw new Error('Configuration \'rootDir\' is not containg a valid absolute path');
+    }
+  } else {
+    var workDir = process.cwd();
+    var returnable = _path2.default.join(workDir, value);
+    if (!(0, _fs.statSync)(returnable).isDirectory()) {
+      throw new Error('Configuration \'rootDir\' is not containg a valid relative path');
+    }
+    return returnable;
+  }
+
+  return value;
 }

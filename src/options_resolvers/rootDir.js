@@ -8,22 +8,23 @@ import path from 'path';
  * @param {*} value
  * @returns {String}
  */
-export default function rootDir(value/* , currentConfig */) {
-    if (!isString(value)) {
-        throw new Error(`Configuration 'rootDir' is not a string`);
-    }
-    console.log("HERE WE ARE .............")
-    if (!isAbsolute(value) ) {
-        if(!statSync(value).isDirectory()) {
-          throw new Error(`Configuration 'rootDir' is not containg a valid absolute path`);
-        }
-    } else {
-      const workDir = process.cwd()
-      const returnable = path.join(workDir, value)
-      console.log("path was")
-      console.log(returnable)
-        return returnable
-    }
+ export default function rootDir(value/* , currentConfig */) {
+  if (!isString(value)) {
+    throw new Error(`Configuration 'rootDir' is not a string`);
+  }
 
-    return value;
+  if (isAbsolute(value) ) {
+    if(!statSync(value).isDirectory()) {
+      throw new Error(`Configuration 'rootDir' is not containg a valid absolute path`);
+    }
+  } else {
+    const workDir = process.cwd()
+    const returnable = path.join(workDir, value)
+    if(!statSync(returnable).isDirectory()) {
+      throw new Error(`Configuration 'rootDir' is not containg a valid relative path`);
+    }
+    return returnable
+  }
+
+  return value;
 }
